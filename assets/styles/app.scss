@@ -1,0 +1,7 @@
+@import "../../vendor/twbs/bootstrap/scss/bootstrap.scss";
+
+@import "layout/topbar";
+
+#main-wrap {
+  grid-template-rows: minmax(40px, 60px) 1fr;
+}

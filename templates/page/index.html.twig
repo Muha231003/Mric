@@ -1,0 +1,16 @@
+{% extends "base.html.twig" %}
+
+{% block topbar_items %}
+	<div class="d-flex gap-4 ms-5">
+		<a href="{{ path("app") }}" type="button" class="btn btn-outline-primary">Home</a>
+		<a href="{{ path("app.done") }}" type="button" class="btn btn-outline-primary">Partite Terminate</a>
+		<a href="{{ path("app.create") }}" type="button" class="btn btn-outline-primary">Aggiungi Partite</a>
+	</div>
+{% endblock %}
+
+
+{% block main %}
+	{% for type, message in app.session.flashbag.all %}
+        {% include "component/flash.html.twig" with { type: type, message: message|first } only %}
+    {% endfor %}
+{% endblock %}
