@@ -2,34 +2,36 @@
 
 {% block main %}
 <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 col-lg-4">
-                    <div class="card shadow">
-                        <div class="card-body">
-                            <h1 class="h4 mb-3 text-center">Login</h1>
-                            <form action="" method="POST">
-                                <div class="mb-3">
-                                    <label for="matrikel" class="form-label">Nome utente</label>
-                                    <input type="text" name="matrikel" id="matrikel" class="form-control" value="" placeholder="Nome utente" required="">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Password</label>
-                                    <input type="password" name="password" id="password" placeholder="••••••••" class="form-control" value="" required="">
-                                </div>
-								<div class"text-center">
-                                <button type="submit" value="LOGIN" class="btn btn-primary btn-block">Accedi</button>
-								</div>
-                            </form>
-                        </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h1 class="h4 mb-3 text-center">Login</h1>
+                        <form action="" method="POST">
+                            <div class="mb-3">
+                                <label for="matrikel" class="form-label">Nome utente</label>
+                                <input type="text" name="matrikel" id="matrikel" class="form-control" value=""
+                                    placeholder="Nome utente" required="">
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" name="password" id="password" placeholder="••••••••"
+                                    class="form-control" value="" required="">
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary" value="LOGIN" type="submit">Accedi</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="row justify-content-center mt-2">
-                <div class="col-md-6 col-lg-4">
-                    <p class="text-center text-muted">Non hai un account? <a href="index.php?aktion=registrierung" style="color: blue;">Registrati</a></p>
-                </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-md-6 col-lg-4">
+                <p class="text-center text-muted">Non hai un account? <a href="{{ path('auth.register') }}">Registrati</a></p>
             </div>
         </div>
-		</div>
+    </div>
+</div>
 {% endblock %}

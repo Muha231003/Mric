@@ -1,1 +1,29 @@
 {% extends "base.html.twig" %}
+
+{% block main %}
+<div class="container">
+    <form>
+        <div class="form-group">
+            <label for="ort">Ort</label>
+            <input type="text" class="form-control" id="ort" placeholder="Enter Ort">
+        </div>
+        <div class="form-group">
+            <label for="heimmanschaft">Heimmanschaft</label>
+            <input type="text" class="form-control" id="heimmanschaft" placeholder="Enter Heimmanschaft">
+        </div>
+        <div class="form-group">
+            <label for="schiedsrichter">Schiedsrichter</label>
+            <input type="text" class="form-control" id="schiedsrichter" placeholder="Enter Schiedsrichter">
+        </div>
+        <div class="form-group">
+            <label for="datumUndZeit">Datum und Zeit</label>
+            <input type="datetime-local" class="form-control" id="datumUndZeit" placeholder="Enter Datum und Zeit">
+        </div>
+        <div class="form-group">
+            <label for="gastmannschaft">Gastmannschaft</label>
+            <input type="text" class="form-control" id="gastmannschaft" placeholder="Enter Gastmannschaft">
+        </div>
+        <button type="submit" class="btn btn-primary">Bestätigen</button>
+    </form>
+</div>
+{% endblock %}
