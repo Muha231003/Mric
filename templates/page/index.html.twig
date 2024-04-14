@@ -1,16 +1,25 @@
 {% extends "base.html.twig" %}
 
 {% block topbar_items %}
-	<div class="d-flex gap-4 ms-5">
-		<a href="{{ path("app") }}" type="button" class="btn btn-outline-primary">Home</a>
-		<a href="{{ path("app.done") }}" type="button" class="btn btn-outline-primary">Partite Terminate</a>
-		<a href="{{ path("app.create") }}" type="button" class="btn btn-outline-primary">Aggiungi Partite</a>
+	<div class="topbar-items d-flex gap-4 ms-5 justify-content-center">
+		{% set route = app.request.attributes.get('_route') %}
+
+		<a href="{{ path("app") }}" type="button" class="btn btn-outline-primary{% if route == " app" %} active{% endif %}">Home</a>
+		<a href="{{ path("app.done") }}" type="button" class="btn btn-outline-primary{% if route == " app.done" %} active{% endif %}">Partite Terminate</a>
+		<a href="{{ path("app.create") }}" type="button" class="btn btn-outline-primary{% if route == " app.create" %} active{% endif %}">Aggiungi Partite</a>
 	</div>
 {% endblock %}
 
 
 {% block main %}
-	{% for type, message in app.session.flashbag.all %}
-        {% include "component/flash.html.twig" with { type: type, message: message|first } only %}
-    {% endfor %}
+	{% if not Context.gamesInProgress|length %}
+		<div class="card" style="width: 18rem;">
+			<img src="/imgs/soccer-man.svg" class="card-img-top mt-3" height="100px" alt="">
+			<div class="card-body">
+				<h5 class="card-title">Non ci sono partite in corso!</h5>
+				<p class="card-text">Crea una nuova partita cliccando sul pulsante sottostante</p>
+				<a href="{{ path("app.create") }}" class="btn btn-primary w-100">Crea</a>
+			</div>
+		</div>
+	{% endif %}
 {% endblock %}

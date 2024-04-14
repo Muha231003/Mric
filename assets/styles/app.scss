@@ -4,4 +4,9 @@
 
 #main-wrap {
   grid-template-rows: minmax(40px, 60px) 1fr;
+  height: inherit;
+}
+
+.card {
+  height: fit-content;
 }

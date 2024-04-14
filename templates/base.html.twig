@@ -18,21 +18,44 @@
 		{% endblock %}
 	</head>
 	<body class="vh-100">
+		{% block flashes %}
+			{% if app.flashes|length %}
+				<div class="d-flex flex-column position-fixed py-3 overflow-auto top-0 end-0 m-3">
+					{% for type, messages in app.flashes %}
+						{% for message in messages %}
+							{% include 'component/flash.html.twig' with { type: type, message: message } only %}
+						{% endfor %}
+					{% endfor %}
+				</div>
+			{% endif %}
+		{% endblock %}
+
 		{% block body %}
 			<div id="main-wrap" class="d-grid">
-				<div id="topbar" class="d-flex align-items-center justify-content-center">
+				<div id="topbar" class="d-flex align-items-center justify-content-center py-2 px-5">
+					<a class="d-flex align-items-center gap-3 text-decoration-none" href="{{ path("app") }}">
+						<img src="/imgs/ball.svg" alt=""/>
+						<h2 class="fw-bolder m-0">MRIC</h2>
+					</a>
+
 					{% block topbar_items %}{% endblock %}
-					<div class="dropdown ms-auto px-5">
-						<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Dropdown button
-						</button>
-						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-							<a class="dropdown-item" href="#">Profilo</a>
-							<a class="dropdown-item" href="#">Esci</a>
-						</div>
-					</div>
+					
+					{% block dropdown_user %}
+						{% if Context.user(app.session.get("session")|default(-1)) %}
+							<div class="dropdown ms-auto">
+								<button class="btn btn-secondary d-flex align-items-center gap-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<img src="/imgs/referee.svg" alt="" />
+									Arbitro
+								</button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item" href="{{ path("app.account") }}">Profilo</a>
+									<a class="dropdown-item" href="{{ path("auth.logout") }}">Esci</a>
+								</div>
+							</div>
+						{% endif %}
+					{% endblock %}
 				</div>
-				<main class="h-100">
+				<main class="h-100 p-5 d-flex justify-content-center">
 					{% block main %}{% endblock %}
 				</main>
 			</div>

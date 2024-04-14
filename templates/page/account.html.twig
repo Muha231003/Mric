@@ -1,0 +1,17 @@
+{% extends "page/index.html.twig" %}
+
+{% block main %}
+	{% set user = Context.user(app.session.get("session")) %}
+
+	<div class="card me-auto" style="width: 18rem;">
+		<div class="card-header fs-5">
+			{{ user.name }}
+			<span class="fs-6 text-muted">{{ user.username }}</span>
+		</div>
+		<ul class="list-group list-group-flush">
+			<li class="list-group-item d-flex gap-2"><img src="/imgs/field.svg" alt="" height="24px" />Partite giocate: <span class="badge bg-secondary">0</span></li>
+			<li class="list-group-item">Cartellinini gialli: <span class="badge bg-secondary">54</span></li>
+			<li class="list-group-item">Cartellini rossi: <span class="badge bg-secondary">33</span></li>
+		</ul>
+	</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "page/index.html.twig" %}
+
+{% block main %}
+	{% if not Context.gamesDone|length %}
+		<div class="card" style="width: 18rem;">
+			<img src="/imgs/soccer-man.svg" class="card-img-top mt-3" height="100px" alt="">
+			<div class="card-body">
+				<h5 class="card-title">Nessuna partita é ancora stata creata!</h5>
+				<p class="card-text">Crea una nuova partita cliccando sul pulsante sottostante</p>
+				<a href="{{ path("app.create") }}" class="btn btn-primary w-100">Crea</a>
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}

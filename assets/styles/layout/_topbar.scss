@@ -1,3 +1,7 @@
 #topbar {
-    box-shadow: 0px 0px 10px #00000088;
+  box-shadow: 0px 0px 10px #00000088;
+
+  .topbar-items {
+    flex: 1;
+  }
 }
