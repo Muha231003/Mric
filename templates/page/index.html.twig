@@ -4,9 +4,9 @@
 	<div class="topbar-items d-flex gap-4 ms-5 justify-content-center">
 		{% set route = app.request.attributes.get('_route') %}
 
-		<a href="{{ path("app") }}" type="button" class="btn btn-outline-primary{% if route == " app" %} active{% endif %}">Home</a>
-		<a href="{{ path("app.done") }}" type="button" class="btn btn-outline-primary{% if route == " app.done" %} active{% endif %}">Partite Terminate</a>
-		<a href="{{ path("app.create") }}" type="button" class="btn btn-outline-primary{% if route == " app.create" %} active{% endif %}">Aggiungi Partite</a>
+		<a href="{{ path("app") }}" type="button" class="btn btn-outline-primary{% if route == "app" %} active{% endif %}">Home</a>
+		<a href="{{ path("app.done") }}" type="button" class="btn btn-outline-primary{% if route == "app.done" %} active{% endif %}">Partite Terminate</a>
+		<a href="{{ path("app.create") }}" type="button" class="btn btn-outline-primary{% if route == "app.create" %} active{% endif %}">Aggiungi Partite</a>
 	</div>
 {% endblock %}
 
