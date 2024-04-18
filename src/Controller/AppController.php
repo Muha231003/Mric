@@ -46,4 +46,12 @@ class AppController extends AbstractController
             return $this->render('page/create.html.twig');
         }, $request);
     }
+
+    #[Route('/events', name: 'app.events')]
+    public function events(Request $request): Response
+    {
+        return $this->guardService->Guard(function () {
+            return $this->render('page/events.html.twig');
+        }, $request);
+    }
 }

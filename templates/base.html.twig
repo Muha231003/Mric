@@ -41,19 +41,20 @@
 					{% block topbar_items %}{% endblock %}
 					
 					{% block dropdown_user %}
-						{% if Context.user(app.session.get("session")|default(-1)) %}
-							<div class="dropdown ms-auto">
-								<button class="btn btn-secondary d-flex align-items-center gap-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									<img src="/imgs/referee.svg" alt="" />
-									Arbitro
-								</button>
-								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-									<a class="dropdown-item" href="{{ path("app.account") }}">Profilo</a>
-									<a class="dropdown-item" href="{{ path("auth.logout") }}">Esci</a>
-								</div>
-							</div>
-						{% endif %}
-					{% endblock %}
+    {% if Context.user(app.session.get("session")|default(-1)) %}
+        <div class="dropdown ms-auto">
+            <button class="btn btn-secondary d-flex align-items-center gap-2 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="/imgs/referee.svg" alt="" />
+                {{ Context.user(app.session.get("session")|default(-1)).name }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{{ path("app.account") }}">Profilo</a>
+                <a class="dropdown-item" href="{{ path("auth.logout") }}">Esci</a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
 				</div>
 				<main class="h-100 p-5 d-flex justify-content-center">
 					{% block main %}{% endblock %}
