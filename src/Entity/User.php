@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
@@ -21,6 +22,9 @@ class User
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
+
+    #[ORM\OneToMany(targetEntity: Game::class, mappedBy: 'games')]
+    private Collection $games;
 
     public function getId(): ?int
     {
@@ -43,8 +47,6 @@ class User
     public function setName($name)
     {
         $this->name = $name;
-
-        return $this;
     }
 
     /**
@@ -63,13 +65,11 @@ class User
     public function setUsername($username)
     {
         $this->username = $username;
-
-        return $this;
     }
 
     /**
      * Get the value of password
-     */ 
+     */
     public function getPassword()
     {
         return $this->password;
@@ -79,11 +79,9 @@ class User
      * Set the value of password
      *
      * @return  self
-     */ 
+     */
     public function setPassword($password)
     {
         $this->password = $password;
-
-        return $this;
     }
 }

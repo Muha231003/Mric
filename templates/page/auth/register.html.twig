@@ -1,38 +1,45 @@
 {% extends "base.html.twig" %}
 
 {% block main %}
-<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <h1 class="h4 mb-3 text-center">Registrazione</h1>
-                        <form action="{{ path("auth.register.submit") }}" method="POST" class="space-y-4 md:space-y-6">
-                            <div class="mb-3">
-                                <label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nome e cognome</label>
-                                <input type="text" name="name" id="name" class="form-control" value="" placeholder="Nome e cognome" required="">
-                            </div>
-                            <div class="mb-3">
-                                <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Nome utente</label>
-                                <input type="text" name="username" id="username" class="form-control" value="" placeholder="Nome utente" required="">
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="block mb-0 text-sm font-medium text-gray-900">Password</label>
-                                <input type="password" name="password" id="password" placeholder="••••••••" class="form-control" value="" required="">
-                            </div>
-                            <div class="flex justify-center">
-                                <div class="g-recaptcha" data-sitekey="6LezqWApAAAAAEERonWy8x1wcNRz-fNsvJO7ZL2V"></div>
-                            </div>
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-primary" type="submit">Registrati</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+	<div class="container d-flex justify-content-center align-items-center">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="card shadow">
+						<div class="card-body">
+							<h1 class="h4 mb-3 text-center">Registrazione</h1>
+							<form action="{{ path("auth.register.submit") }}" method="POST" class="space-y-4 md:space-y-6">
+								<div class="mb-3">
+									<label for="name" class="block mb-2 text-sm font-medium text-gray-900">Nome e cognome</label>
+									<input type="text" name="name" id="name" class="form-control" value="" placeholder="Nome e cognome" required="">
+								</div>
+								<div class="mb-3">
+									<label for="username" class="block mb-2 text-sm font-medium text-gray-900">Nome utente</label>
+									<input type="text" name="username" id="username" class="form-control" value="" placeholder="Nome utente" required="">
+								</div>
+								<div class="mb-3">
+									<label for="password" class="block mb-0 text-sm font-medium text-gray-900">Password</label>
+									<input type="password" name="password" id="password" placeholder="••••••••" class="form-control" value="" required="">
+								</div>
+								<div class="flex justify-center">
+									<div class="g-recaptcha" data-sitekey="6LezqWApAAAAAEERonWy8x1wcNRz-fNsvJO7ZL2V"></div>
+								</div>
+								<div class="d-grid gap-2">
+									<button class="btn btn-primary" type="submit">Registrati</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-center mt-2">
+				<div class="col-md-6 col-lg-4">
+					<p class="text-center text-muted">
+						Hai già un account?
+						<a href="{{ path('auth.login') }}">Accedi</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
-

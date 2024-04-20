@@ -4,16 +4,51 @@
 	<div class="topbar-items d-flex gap-4 ms-5 justify-content-center">
 		{% set route = app.request.attributes.get('_route') %}
 
-		<a href="{{ path("app") }}" type="button" class="btn btn-outline-primary{% if route == "app" %} active{% endif %}">Home</a>
-		<a href="{{ path("app.done") }}" type="button" class="btn btn-outline-primary{% if route == "app.done" %} active{% endif %}">Partite Terminate</a>
-		<a href="{{ path("app.create") }}" type="button" class="btn btn-outline-primary{% if route == "app.create" %} active{% endif %}">Aggiungi Partite</a>
+		<a href="{{ path("app") }}" type="button" class="btn btn-outline-primary{% if route == " app" %} active{% endif %}">Home</a>
+		<a href="{{ path("app.done") }}" type="button" class="btn btn-outline-primary{% if route == " app.done" %} active{% endif %}">Partite Terminate</a>
+		<a href="{{ path("app.create") }}" type="button" class="btn btn-outline-primary{% if route == " app.create" %} active{% endif %}">Aggiungi Partite</a>
 	</div>
 {% endblock %}
 
 
 {% block main %}
-	{% if not Context.gamesInProgress|length %}
-		<div class="card" style="width: 18rem;">
+	{% for game in Context.gamesInProgress %}
+		<div class="card shadow position-relative" style="width: 18rem;">
+			<span class="time-counter position-absolute badge bg-primary" title="90:00">
+				90:00
+			</span>
+
+			<img src="/imgs/playing.svg" class="card-img-top mt-3" height="100px" alt="">
+			<div class="card-body">
+				<h5 class="card-title text-center">
+					{{ game.localTeam }}
+					/
+					{{ game.guestTeam }}
+				</h5>
+				<h6 class="card-subtitle my-3 text-muted">{{ game.date|date() }}</h6>
+
+				{% set isRefereeMe = game.mainReferee.id == user.id ? "Tu" : game.mainReferee.name %}
+				<p class="card-tex m-0">
+					<span class="fw-bold">Arbitro</span>:
+					{{ isRefereeMe }}</p>
+				<p class="card-text m-0">
+					<span class="fw-bold">Arbitro secondario</span>:
+					{{ game.subReferee }}</p>
+
+				<ul class="list-group list-group-flush mt-3">
+					<li class="list-group-item d-flex p-1 py-2 gap-2"><img src="/imgs/yellow-card.svg" alt="" height="24px"/>Cartellini gialli:
+						<span class="badge bg-secondary ms-auto">0</span>
+					</li>
+					<li class="list-group-item d-flex p-1 py-2 gap-2"><img src="/imgs/red-card.svg" alt="" height="24px"/>Cartellini rossi:
+						<span class="badge bg-secondary ms-auto">0</span>
+					</li>
+				</ul>
+
+				<a href="{{ path("app") }}" class="btn btn-primary w-100 mt-3">Entra in gioco (todo)</a>
+			</div>
+		</div>
+	{% else %}
+		<div class="card shadow" style="width: 18rem;">
 			<img src="/imgs/soccer-man.svg" class="card-img-top mt-3" height="100px" alt="">
 			<div class="card-body">
 				<h5 class="card-title">Non ci sono partite in corso!</h5>
@@ -21,5 +56,6 @@
 				<a href="{{ path("app.create") }}" class="btn btn-primary w-100">Crea</a>
 			</div>
 		</div>
-	{% endif %}
+	{% endfor %}
+
 {% endblock %}

@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Game;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\GuardService;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Entity\User;
 
 class AppController extends AbstractController
 {
@@ -52,6 +57,46 @@ class AppController extends AbstractController
     {
         return $this->guardService->Guard(function () {
             return $this->render('page/events.html.twig');
+        }, $request);
+    }
+
+    // Posts
+
+    #[Route('/create-submit', name: 'app.create-submit', methods: ["POST"])]
+    public function createSubmit(Request $request, EntityManagerInterface $entityManagerInterface): RedirectResponse
+    {
+        return $this->guardService->Guard(function () use ($request, $entityManagerInterface) {
+            $payload = $request->getPayload();
+            $luogo = $payload->get("luogo");
+            $squadradicasa = $payload->get("squadradicasa");
+            $squadraospite = $payload->get("squadraospite");
+            $arbitro = $payload->get("arbitro");
+            $dataeora = $payload->get("dataeora");
+
+            $repository = $entityManagerInterface->getRepository(User::class);
+            $user = $repository->findOneBy(["id" => $request->getSession()->get("session")]);
+
+            if ($luogo && $squadradicasa && $squadraospite && $arbitro && $dataeora && $user) {
+                $game = new Game();
+                $game->setMainReferee($user);
+                $game->setLocation($luogo);
+                $game->setLocalTeam($squadradicasa);
+                $game->setGuestTeam($squadraospite);
+                $game->setSubReferee($arbitro);
+                $game->setDate(new DateTime($dataeora));
+
+                $entityManagerInterface->persist($game);
+                $entityManagerInterface->flush();
+
+                $this->addFlash("success", "Partia create con successo!");
+
+
+                return $this->redirect($this->generateUrl("app"));
+            }
+
+            $this->addFlash("danger", "Uno o piu campi che sono stati inseriti sono invalidi!");
+
+            return $this->redirect($this->generateUrl("app.create"));
         }, $request);
     }
 }
