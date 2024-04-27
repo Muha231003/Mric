@@ -15,10 +15,11 @@ use App\Entity\User;
 
 class AppController extends AbstractController
 {
-
     public function __construct(private readonly GuardService $guardService)
     {
     }
+
+    /** Route GET - Restituire i template */
 
     #[Route('/', name: 'app')]
     public function app(Request $request): Response
@@ -52,15 +53,25 @@ class AppController extends AbstractController
         }, $request);
     }
 
-    #[Route('/events', name: 'app.events')]
-    public function events(Request $request): Response
+    #[Route('/game/{id}', name: 'app.game')]
+    public function events(Request $request, EntityManagerInterface $entityManagerInterface, int $id): Response|RedirectResponse
     {
-        return $this->guardService->Guard(function () {
-            return $this->render('page/events.html.twig');
+        return $this->guardService->Guard(function () use ($entityManagerInterface, $id) {
+            $repository = $entityManagerInterface->getRepository(Game::class);
+            $game = $repository->findOneBy(["id" => $id]);
+
+            if ($game) {
+                return $this->render('page/game.html.twig', ["game" => $game]);
+            } else {
+                $this->addFlash("warning", "Partia non trovata...");
+
+                return $this->redirect($this->generateUrl("app"));
+            }
+            
         }, $request);
     }
 
-    // Posts
+    /** Route POST - Submit dei form */
 
     #[Route('/create-submit', name: 'app.create-submit', methods: ["POST"])]
     public function createSubmit(Request $request, EntityManagerInterface $entityManagerInterface): RedirectResponse
@@ -89,7 +100,6 @@ class AppController extends AbstractController
                 $entityManagerInterface->flush();
 
                 $this->addFlash("success", "Partia create con successo!");
-
 
                 return $this->redirect($this->generateUrl("app"));
             }

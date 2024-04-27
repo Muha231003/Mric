@@ -10,7 +10,6 @@
 	</div>
 {% endblock %}
 
-
 {% block main %}
 	{% for game in Context.gamesInProgress %}
 		<div class="card shadow position-relative" style="width: 18rem;">
@@ -44,7 +43,7 @@
 					</li>
 				</ul>
 
-				<a href="{{ path("app") }}" class="btn btn-primary w-100 mt-3">Entra in gioco (todo)</a>
+				<a href="{{ path("app.game", { id: game.id }) }}" class="btn btn-primary w-100 mt-3">Entra in gioco</a>
 			</div>
 		</div>
 	{% else %}

@@ -13,6 +13,8 @@ use App\Entity\User;
 class AuthController extends AbstractController
 {
 
+    /** Route GET - Restituire i template */
+
     #[Route('/login', name: 'auth.login')]
     public function login(): Response
     {
@@ -32,10 +34,10 @@ class AuthController extends AbstractController
         return $this->redirect($this->generateUrl("auth.login"));
     }
 
-    // Submits
+    /** Route POST - Submit dei form */
 
     #[Route('/login_submit', name: 'auth.login.submit', methods: ["post"])]
-    public function login_submit(Request $request, EntityManagerInterface  $entityManagerInterface): RedirectResponse
+    public function login_submit(Request $request, EntityManagerInterface $entityManagerInterface): RedirectResponse
     {
         $payload = $request->getPayload();
         $username = $payload->get("username");
@@ -62,7 +64,7 @@ class AuthController extends AbstractController
     }
 
     #[Route('/register_submit', name: 'auth.register.submit', methods: ["post"])]
-    public function register_submit(Request $request, EntityManagerInterface  $entityManagerInterface): RedirectResponse
+    public function register_submit(Request $request, EntityManagerInterface $entityManagerInterface): RedirectResponse
     {
         $payload = $request->getPayload();
         $name = $payload->get("name");
@@ -70,9 +72,16 @@ class AuthController extends AbstractController
         $password = $payload->get("password");
 
         if ($name && $username && $password) {
+            // Il campo "username" deve esere unico!
+            if ($this->usernameExists($entityManagerInterface, $username)) {
+                $this->addFlash("warning", "Username $username already exists!");
+                return $this->redirect($this->generateUrl("auth.register"));
+            }
+
             $user = new User();
             $user->setName($name);
             $user->setUsername($username);
+            // Hash della password usando l'algoritmo SHA256
             $hash = hash("sha256", $password);
             $user->setPassword($hash);
 
@@ -88,5 +97,12 @@ class AuthController extends AbstractController
             $this->addFlash("warning", "An unexpected error has occurred. Please try again!");
             return $this->redirect($this->generateUrl("auth.register"));
         }
+    }
+
+    private function usernameExists(EntityManagerInterface  $entityManagerInterface, string $username): bool
+    {
+        $repository = $entityManagerInterface->getRepository(User::class);
+
+        return $repository->findOneBy(["username" => $username]) !== null;
     }
 }

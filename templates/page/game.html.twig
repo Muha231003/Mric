@@ -1,0 +1,121 @@
+{% extends "page/index.html.twig" %}
+
+{% block title %}Partita -
+	{{ game.localTeam }}
+	/
+	{{ game.guestTeam }}
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	<script type="text/javascript" src="{{ asset("chat.js") }}" defer></script>
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	<link href="{{ asset("styles/component/clock.scss") }}" rel="stylesheet">
+{% endblock %}
+
+{% block main %}
+	<button class="btn btn-secondary position-absolute" style="right: 1em" type="button" data-bs-toggle="offcanvas" data-bs-target="#chat" aria-controls="chat">
+		<img src="/imgs/chat.svg" alt=""/>
+		Chat
+	</button>
+
+	<div class="d-flex flex-column align-items-center w-100 gap-4">
+		<h2 class="fs-clock text-center">00:00</h2>
+
+		<button class="btn btn-outline-secondary mw-fit" type="button" data-bs-toggle="collapse" data-bs-target="#goal" aria-expanded="false" aria-controls="goal">
+			<img src="/imgs/ball.svg" height="32px" alt=""/>
+		</button>
+
+		<div class="collapse" id="goal">
+			<div class="card card-body shadow">
+				<form class="d-flex gap-2" action="{{ path("app") }}" method="POST">
+					<div class="form-floating">
+						<select class="form-select" id="squadra" aria-label="Default select example" required>
+							<option selected disabled value="">Seleziona una squadra</option>
+							<option value="{{ game.localTeam }}">{{ game.localTeam }}</option>
+							<option value="{{ game.guestTeam }}">{{ game.guestTeam }}</option>
+						</select>
+						<label for="squadra">Squadra</label>
+					</div>
+					<input role="btn" class="btn btn-primary" type="submit" value="Goal !!"/>
+				</form>
+			</div>
+		</div>
+
+		<button class="btn btn-outline-secondary mw-fit" type="button" data-bs-toggle="collapse" data-bs-target="#yellow-card" aria-expanded="false" aria-controls="yellow-card">
+			<img src="/imgs/yellow-card.svg" height="32px" alt=""/>
+		</button>
+
+		<div class="collapse" id="yellow-card">
+			<div class="card card-body shadow">
+				<form class="d-flex gap-2" action="{{ path("app") }}" method="POST">
+					<div class="input-group flex-nowrap">
+						<span class="input-group-text" id="playerNumber">@</span>
+						<input type="text" class="form-control" placeholder="7" aria-label="playerNumber" required>
+					</div>
+
+					<input role="btn" class="btn btn-warning" type="submit" value="Cartellino giallo"/>
+				</form>
+			</div>
+		</div>
+
+		<button class="btn btn-outline-secondary mw-fit" type="button" data-bs-toggle="collapse" data-bs-target="#red-card" aria-expanded="false" aria-controls="red-card">
+			<img src="/imgs/red-card.svg" height="32px" alt=""/>
+		</button>
+
+		<div class="collapse" id="red-card">
+			<div class="card card-body shadow">
+				<form class="d-flex gap-2" action="{{ path("app") }}" method="POST">
+					<div class="input-group flex-nowrap">
+						<span class="input-group-text" id="playerNumber">@</span>
+						<input type="text" class="form-control" placeholder="7" aria-label="playerNumber" required>
+					</div>
+
+					<input role="btn" class="btn btn-danger" type="submit" value="Cartellino rosso"/>
+				</form>
+			</div>
+		</div>
+
+		<button class="btn btn-outline-secondary mw-fit" type="button" data-bs-toggle="collapse" data-bs-target="#switch-right" aria-expanded="false" aria-controls="switch-right">
+			<img src="/imgs/switch-right.svg" height="32px" alt=""/>
+		</button>
+
+		<div class="collapse" id="switch-right">
+			<div class="card card-body shadow">
+				Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+			</div>
+		</div>
+
+		<button class="btn btn-outline-secondary mw-fit" type="button" data-bs-toggle="collapse" data-bs-target="#switch-left" aria-expanded="false" aria-controls="switch-left">
+			<img src="/imgs/switch-left.svg" height="32px" alt=""/>
+		</button>
+
+		<div class="collapse" id="switch-left">
+			<div class="card card-body shadow">
+				Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+			</div>
+		</div>
+
+		<button class="btn btn-outline-secondary mw-fit" type="button" data-bs-toggle="collapse" data-bs-target="#time-add" aria-expanded="false" aria-controls="time-add">
+			<img src="/imgs/time-add.svg" height="32px" alt=""/>
+		</button>
+
+		<div class="collapse" id="time-add">
+			<div class="card card-body shadow">
+				<form class="d-flex gap-2" action="{{ path("app") }}" method="POST">
+					<div class="input-group flex-nowrap">
+						<input type="number" class="form-control" placeholder="10" aria-label="extraTime" min="1" max="90" required>
+						<span class="input-group-text" id="playerNumber">Minuti</span>
+					</div>
+
+					<input role="btn" class="btn btn-primary" type="submit" value="Aggiungi tempo extra"/>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	{% include "component/offcanvas.html.twig" with { id: "chat", title: "Chat pubblica" } %}
+{% endblock %}
