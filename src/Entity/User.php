@@ -14,16 +14,16 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 32)]
+    #[ORM\Column(length: 32, type: "string")]
     private ?string $name = null;
 
-    #[ORM\Column(length: 32)]
+    #[ORM\Column(length: 32, type: "string")]
     private ?string $username = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, type: "text")]
     private ?string $password = null;
 
-    #[ORM\OneToMany(targetEntity: Game::class, mappedBy: 'games')]
+    #[ORM\OneToMany(targetEntity: Game::class, mappedBy: 'mainReferee')]
     private Collection $games;
 
     public function getId(): ?int
@@ -83,5 +83,21 @@ class User
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    /**
+     * Get the value of games
+     */ 
+    public function getGames()
+    {
+        return $this->games;
+    }
+
+    /**
+     * Set the value of games
+     */ 
+    public function setGames($games)
+    {
+        $this->games = $games;
     }
 }

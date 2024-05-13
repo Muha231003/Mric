@@ -11,13 +11,13 @@
 			</div>
 			<ul class="list-group list-group-flush">
 				<li class="list-group-item d-flex gap-2"><img src="/imgs/field.svg" alt="" height="24px"/>Partite giocate:
-					<span class="badge bg-secondary ms-auto">0</span>
+					<span class="badge bg-secondary ms-auto">{{ games|length }}</span>
 				</li>
 				<li class="list-group-item d-flex gap-2"><img src="/imgs/yellow-card.svg" alt="" height="24px"/>Cartellini gialli:
-					<span class="badge bg-secondary ms-auto">54</span>
+					<span class="badge bg-secondary ms-auto">{{ yellows|length }}</span>
 				</li>
 				<li class="list-group-item d-flex gap-2"><img src="/imgs/red-card.svg" alt="" height="24px"/>Cartellini rossi:
-					<span class="badge bg-secondary ms-auto">33</span>
+					<span class="badge bg-secondary ms-auto">{{ reds|length }}</span>
 				</li>
 			</ul>
 		</div>
@@ -27,67 +27,25 @@
 				<caption>Storico partite</caption>
 				<thead>
 					<tr>
-						<th scope="col">#</th>
-						<th scope="col">First</th>
-						<th scope="col">Last</th>
-						<th scope="col">Handle</th>
-						<th scope="col"></th>
+						<th scope="col">Arbitro di scorta</th>
+						<th scope="col">Luogo</th>
+						<th scope="col">Squadra locale</th>
+						<th scope="col">Squadra ospite</th>
+						<th scope="col">Data</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<th scope="row">1</th>
-						<td>Mark</td>
-						<td>Otto</td>
-						<td>@mdo</td>
-						<td><img role="button" src="/imgs/delete.svg" height="24px" alt=""/></td>
-					</tr>
-					<tr>
-						<th scope="row">2</th>
-						<td>Jacob</td>
-						<td>Thornton</td>
-						<td>@fat</td>
-						<td><img role="button" src="/imgs/delete.svg" height="24px" alt=""/></td>
-					</tr>
-					<tr>
-						<th scope="row">3</th>
-						<td colspan="2">Larry the Bird</td>
-						<td>@twitter</td>
-						<td><img role="button" src="/imgs/delete.svg" height="24px" alt=""/></td>
-					</tr>
-					<tr>
-						<th scope="row">4</th>
-						<td colspan="2">Larry the Bird</td>
-						<td>@twitter</td>
-						<td><img role="button" src="/imgs/delete.svg" height="24px" alt=""/></td>
-					</tr>
+					{% for game in games %}
+						<tr>
+							<th>{{ game.subReferee }}</th>
+							<th>{{ game.location|capitalize }}</th>
+							<td>{{ game.localTeam|capitalize }}</td>
+							<td>{{ game.guestTeam|capitalize }}</td>
+							<td>{{ game.date|date }}</td>
+						</tr>
+					{% endfor %}
 				</tbody>
 			</table>
-
-			<nav aria-label="Page navigation example">
-				<ul class="pagination">
-					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#">1</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#">2</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#">3</a>
-					</li>
-					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-				</ul>
-			</nav>
 		</div>
 	</div>
-
 {% endblock %}

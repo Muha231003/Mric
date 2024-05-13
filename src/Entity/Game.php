@@ -4,8 +4,9 @@ namespace App\Entity;
 
 use App\Repository\GameRepository;
 use DateTime;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
 class Game
@@ -15,23 +16,40 @@ class Game
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    private ?User $mainReferee;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "games")]
+    private ?User $mainReferee = null;
 
-    #[ORM\Column(length: 32)]
+    #[ORM\Column(length: 32, type: "string")]
     private ?string $location = null;
 
-    #[ORM\Column(length: 32)]
+    #[ORM\Column(length: 32, type: "string")]
     private ?string $localTeam = null;
 
-    #[ORM\Column(length: 32)]
+    #[ORM\Column(length: 32, type: "string")]
     private ?string $guestTeam = null;
 
-    #[ORM\Column(length: 32)]
+    #[ORM\Column(length: 32, type: "string")]
     private ?string $subReferee = null;
 
     #[ORM\Column(type: 'datetime')]
     private ?DateTime $date = null;
+
+    #[ORM\OneToMany(targetEntity: GameEvent::class, mappedBy: "game")]
+    private ?Collection $gameEvents = null;
+
+    #[ORM\Column(length: 32, type: "string", nullable: true)]
+    private ?string $status = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTime $startTime = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?DateTime $statusUpdate = null;
+
+    public function __construct()
+    {
+        $this->gameEvents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,8 +138,6 @@ class Game
 
     /**
      * Set the value of date
-     *
-     * @return  self
      */
     public function setDate($date)
     {
@@ -138,13 +154,78 @@ class Game
 
     /**
      * Set the value of mainReferee
-     *
-     * @return  self
      */
     public function setMainReferee($mainReferee)
     {
         $this->mainReferee = $mainReferee;
+    }
 
-        return $this;
+    /**
+     * Get the value of gameEvents
+     */
+    public function getGameEvents()
+    {
+        return $this->gameEvents;
+    }
+
+    /**
+     * Set the value of gameEvents
+     */
+    public function setGameEvents(ArrayCollection $gameEvents)
+    {
+        $this->gameEvents = $gameEvents;
+    }
+
+    public function addEvent(GameEvent $event)
+    {
+        $this->gameEvents->add($event);
+    }
+
+    /**
+     * Get the value of status
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the value of status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * Get the value of statusUpdate
+     */
+    public function getStatusUpdate()
+    {
+        return $this->statusUpdate;
+    }
+
+    /**
+     * Set the value of statusUpdate
+     */
+    public function setStatusUpdate($statusUpdate)
+    {
+        $this->statusUpdate = $statusUpdate;
+    }
+
+    /**
+     * Get the value of startTime
+     */ 
+    public function getStartTime()
+    {
+        return $this->startTime;
+    }
+
+    /**
+     * Set the value of startTime
+     */ 
+    public function setStartTime($startTime)
+    {
+        $this->startTime = $startTime;
     }
 }

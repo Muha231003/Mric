@@ -8,7 +8,7 @@
 
 {% block javascripts %}
 	{{ parent() }}
-	<script type="text/javascript" src="{{ asset("chat.js") }}" defer></script>
+	<script type="text/javascript" src="{{ asset("clock.js") }}" defer></script>
 {% endblock %}
 
 {% block stylesheets %}
@@ -16,14 +16,58 @@
 	<link href="{{ asset("styles/component/clock.scss") }}" rel="stylesheet">
 {% endblock %}
 
+{% block main_classlist %}position-relative
+{% endblock %}
+
 {% block main %}
-	<button class="btn btn-secondary position-absolute" style="right: 1em" type="button" data-bs-toggle="offcanvas" data-bs-target="#chat" aria-controls="chat">
-		<img src="/imgs/chat.svg" alt=""/>
-		Chat
-	</button>
+	<div class="offcanvas offcanvas-end show position-absolute border border-top-1 m-3 shadow rounded" style="z-index: 50;" data-bs-backdrop="false" tabindex="-1" id="side-menu">
+		<div class="offcanvas-header">
+			<h5 class="offcanvas-title">Menu</h5>
+		</div>
+		<div class="offcanvas-body d-flex flex-column align-items-center gap-3">
+			<div class="card" style="width: 18rem;">
+				<div class="card-header">
+					<img src="/imgs/info.svg" alt=""/>
+					Info
+				</div>
+				<ul class="list-group list-group-flush">
+					{% set isRefereeMe = game.mainReferee.id == user.id ? "Tu" : game.mainReferee.name %}
+					<li class="list-group-item d-flex gap-2">Arbitro:
+						<span class="fw-bold">{{ isRefereeMe }}</span>
+					</li>
+					<li class="list-group-item d-flex gap-2">Arbitro secondario:
+						<span class="fw-bold">{{ game.subReferee }}</span>
+					</li>
+					<li class="list-group-item d-flex gap-2">Gol squadra di casa:
+						<span class="fw-bold">{{ localScores }}</span>
+					</li>
+					<li class="list-group-item d-flex gap-2">Gol squadra ospite:
+						<span class="fw-bold">{{ guestScores }}</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
 
 	<div class="d-flex flex-column align-items-center w-100 gap-4">
-		<h2 class="fs-clock text-center">00:00</h2>
+		<h2 id="game-timer" data-time="{{ { state: game.status, startTime: game.startTime ,lastUpdate: game.statusUpdate }|json_encode }}" class="fs-clock text-center">00:00</h2>
+
+		{% if game.mainReferee.id == user.id %}
+			<div class="d-flex gap-2">
+				{% if not game.status %}
+					<a href={{ path("app.game.status", { id: game.id, status: "start" } ) }} class="btn btn-primary" type="button">Start</a>
+				{% endif %}
+
+				{% if game.status != "stop" %}
+					<a href={{ path("app.game.status", { id: game.id, status: "stop" } ) }} class="btn btn-primary" type="button">Stop</a>
+				{% endif %}
+
+				{% if game.status != "resume" %}
+					<a href={{ path("app.game.status", { id: game.id, status: "resume" } ) }} class="btn btn-primary" type="button">Resume</a>
+				{% endif %}
+
+			</div>
+		{% endif %}
 
 		<button class="btn btn-outline-secondary mw-fit" type="button" data-bs-toggle="collapse" data-bs-target="#goal" aria-expanded="false" aria-controls="goal">
 			<img src="/imgs/ball.svg" height="32px" alt=""/>
@@ -31,12 +75,12 @@
 
 		<div class="collapse" id="goal">
 			<div class="card card-body shadow">
-				<form class="d-flex gap-2" action="{{ path("app") }}" method="POST">
+				<form class="d-flex gap-2" action="{{ path("app.game.event", { id: game.id, type: "score" }) }}" method="POST">
 					<div class="form-floating">
-						<select class="form-select" id="squadra" aria-label="Default select example" required>
+						<select name="team" class="form-select" id="squadra" aria-label="Default select example" required>
 							<option selected disabled value="">Seleziona una squadra</option>
-							<option value="{{ game.localTeam }}">{{ game.localTeam }}</option>
-							<option value="{{ game.guestTeam }}">{{ game.guestTeam }}</option>
+							<option value="local">{{ game.localTeam }}</option>
+							<option value="guest">{{ game.guestTeam }}</option>
 						</select>
 						<label for="squadra">Squadra</label>
 					</div>
@@ -51,10 +95,10 @@
 
 		<div class="collapse" id="yellow-card">
 			<div class="card card-body shadow">
-				<form class="d-flex gap-2" action="{{ path("app") }}" method="POST">
+				<form class="d-flex gap-2" action="{{ path("app.game.event", { id: game.id, type: "yellow" }) }}" method="POST">
 					<div class="input-group flex-nowrap">
 						<span class="input-group-text" id="playerNumber">@</span>
-						<input type="text" class="form-control" placeholder="7" aria-label="playerNumber" required>
+						<input name="player" type="number" class="form-control" placeholder="7" required>
 					</div>
 
 					<input role="btn" class="btn btn-warning" type="submit" value="Cartellino giallo"/>
@@ -68,10 +112,10 @@
 
 		<div class="collapse" id="red-card">
 			<div class="card card-body shadow">
-				<form class="d-flex gap-2" action="{{ path("app") }}" method="POST">
+				<form class="d-flex gap-2" action="{{ path("app.game.event", { id: game.id, type: "red" }) }}" method="POST">
 					<div class="input-group flex-nowrap">
 						<span class="input-group-text" id="playerNumber">@</span>
-						<input type="text" class="form-control" placeholder="7" aria-label="playerNumber" required>
+						<input type="number" name="player" class="form-control" placeholder="7" required>
 					</div>
 
 					<input role="btn" class="btn btn-danger" type="submit" value="Cartellino rosso"/>
@@ -105,9 +149,9 @@
 
 		<div class="collapse" id="time-add">
 			<div class="card card-body shadow">
-				<form class="d-flex gap-2" action="{{ path("app") }}" method="POST">
+				<form class="d-flex gap-2" action="{{ path("app.game.event", { id: game.id, type: "time" }) }}" method="POST">
 					<div class="input-group flex-nowrap">
-						<input type="number" class="form-control" placeholder="10" aria-label="extraTime" min="1" max="90" required>
+						<input type="number" name="time" class="form-control" placeholder="10" min="1" max="90" required>
 						<span class="input-group-text" id="playerNumber">Minuti</span>
 					</div>
 
@@ -116,6 +160,4 @@
 			</div>
 		</div>
 	</div>
-
-	{% include "component/offcanvas.html.twig" with { id: "chat", title: "Chat pubblica" } %}
 {% endblock %}

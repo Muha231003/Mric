@@ -23,7 +23,13 @@ class ContextService
      */
     public function gamesDone(): array
     {
-        return $this->entityManager->getRepository(Game::class)->findBy([]);
+        $query = $this->entityManager->getConnection()->prepare("SELECT id FROM `game` where TIMESTAMPDIFF(MINUTE, start_time, NOW()) >= 90;");
+        $ids = $query->executeQuery()->fetchAll();
+        $ids = array_values(array_map(function ($i) {
+            return $i["id"];
+        }, $ids));
+
+        return $this->entityManager->getRepository(Game::class)->findBy(["id" => $ids]);
     }
 
     /**
@@ -31,6 +37,12 @@ class ContextService
      */
     public function gamesInProgress(): array
     {
-        return $this->entityManager->getRepository(Game::class)->findBy([]);
+        $query = $this->entityManager->getConnection()->prepare("SELECT id FROM `game` where TIMESTAMPDIFF(MINUTE, start_time, NOW()) < 90 OR start_time IS NULL;");
+        $ids = $query->executeQuery()->fetchAll();
+        $ids = array_values(array_map(function ($i) {
+            return $i["id"];
+        }, $ids));
+
+        return $this->entityManager->getRepository(Game::class)->findBy(["id" => $ids]);
     }
 }
