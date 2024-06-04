@@ -57,7 +57,7 @@ class GameController extends AbstractController
 
                 return $this->render('page/game.html.twig', ["game" => $game, "localScores" => $localScores, "guestScores" => $guestScores]);
             } else {
-                $this->addFlash("warning", "Partia non trovata...");
+                $this->addFlash("warning", "Partita non trovata...");
 
                 return $this->redirect($this->generateUrl("app"));
             }
@@ -92,7 +92,7 @@ class GameController extends AbstractController
                 $entityManagerInterface->persist($game);
                 $entityManagerInterface->flush();
 
-                $this->addFlash("success", "Partia create con successo!");
+                $this->addFlash("success", "Partita create con successo!");
 
                 return $this->redirect($this->generateUrl("app"));
             }
@@ -140,7 +140,7 @@ class GameController extends AbstractController
 
                 return $this->redirect($this->generateUrl("app.game", ["id" => $id]));
             } else {
-                $this->addFlash("warning", "Partia non trovata...");
+                $this->addFlash("warning", "Partita non trovata...");
 
                 return $this->redirect($this->generateUrl("app"));
             }
@@ -178,7 +178,7 @@ class GameController extends AbstractController
 
                 return $this->redirect($this->generateUrl("app.game", ["id" => $id]));
             } else {
-                $this->addFlash("warning", "Partia non trovata...");
+                $this->addFlash("warning", "Partita non trovata...");
 
                 return $this->redirect($this->generateUrl("app"));
             }

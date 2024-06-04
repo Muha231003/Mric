@@ -28,10 +28,10 @@
 
 				{% set isRefereeMe = game.mainReferee.id == user.id ? "Tu" : game.mainReferee.name %}
 				<p class="card-tex m-0">
-					<span class="fw-bold">Arbitro</span>:
+					<span class="fw-bold">Osservatore arbitrale</span>:
 					{{ isRefereeMe }}</p>
 				<p class="card-text m-0">
-					<span class="fw-bold">Arbitro secondario</span>:
+					<span class="fw-bold">Arbitro</span>:
 					{{ game.subReferee }}</p>
 
 				<ul class="list-group list-group-flush mt-3">

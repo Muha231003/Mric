@@ -32,10 +32,10 @@
 				</div>
 				<ul class="list-group list-group-flush">
 					{% set isRefereeMe = game.mainReferee.id == user.id ? "Tu" : game.mainReferee.name %}
-					<li class="list-group-item d-flex gap-2">Arbitro:
+					<li class="list-group-item d-flex gap-2">Osservatore arbitrale:
 						<span class="fw-bold">{{ isRefereeMe }}</span>
 					</li>
-					<li class="list-group-item d-flex gap-2">Arbitro secondario:
+					<li class="list-group-item d-flex gap-2">Arbitro:
 						<span class="fw-bold">{{ game.subReferee }}</span>
 					</li>
 					<li class="list-group-item d-flex gap-2">Gol squadra di casa:
